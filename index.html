@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pendule 2D-3D · SFA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+</head>
+<body>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#fff;font-family:system-ui,-apple-system,sans-serif;}
@@ -12,6 +22,81 @@ canvas{display:block;border-radius:12px;border:1.5px solid #e8e8e8;touch-action:
 .info{font-size:12px;padding:8px 14px;border-radius:20px;background:#f5f5f5;border:1.5px solid #d0d0d0;color:#555;margin:6px 0;font-family:ui-monospace,monospace;line-height:1.8;}
 input[type=range]{flex:1;min-width:110px;}
 </style>
+<style id="sfa-kit">
+/* Kit SFA (clair) — plan blanc sur fond gris-bleu froid, encre bleu nuit, or en accent unique, réglages en règle graduée. */
+:root{--bg:#f3f5f8;--paper:#ffffff;--ink:#0c1f2e;--muted:#5b6b7b;--faint:#8a98a6;--rule:#dfe4ea;--rule2:#c9d1da;
+  --gold:#d9973f;--gold-ink:#9a6420;--press:#e9edf2;
+  --f-ui:"Mulish",system-ui,-apple-system,"Segoe UI",sans-serif;--f-math:"STIX Two Text","Cambria Math",serif;
+  --f-num:"JetBrains Mono",ui-monospace,monospace;color-scheme:light}
+html{background:var(--bg)}
+body{background:var(--bg)!important;color:var(--ink);font-family:var(--f-ui)!important;font-size:15px;line-height:1.5;
+  max-width:1180px;margin:0 auto!important;padding:20px 16px 32px!important}
+.sfa-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 24px;
+  border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:16px}
+.sfa-head h1{font:700 1.5rem/1.2 var(--f-ui);margin:0;letter-spacing:-.005em;text-wrap:balance}
+.sfa-head h1 small{display:block;font:400 .88rem var(--f-ui);color:var(--muted);margin-top:3px}
+.sfa-head .sfa-tag{font:600 .8rem var(--f-ui);color:var(--muted)}
+.sfa-head .sfa-tag b{color:var(--gold-ink);font-weight:700}
+select{font:500 .86rem var(--f-ui)!important;border:1px solid var(--rule2)!important;border-radius:3px!important;background:var(--paper)!important;color:var(--ink)!important;padding:5px 8px!important}
+.sfa-stage{border:1px solid var(--rule)!important;border-radius:4px!important;box-shadow:0 1px 2px rgba(12,31,46,.05),0 8px 24px -16px rgba(12,31,46,.18)}
+.sfa-stage canvas{border:0!important;box-shadow:none!important}
+canvas{background:var(--paper);border:1px solid var(--rule)!important;border-radius:4px!important;box-shadow:0 1px 2px rgba(12,31,46,.05),0 8px 24px -16px rgba(12,31,46,.18)}
+.row{gap:12px!important;margin:10px 0!important}
+.pill,.lbl,.tag{background:none!important;border:0!important;border-radius:0!important;padding:0!important;
+  font:600 .86rem var(--f-ui)!important;color:var(--muted);min-width:0}
+.val{background:none!important;border:0!important;border-radius:0!important;padding:0!important;
+  font:500 .9rem var(--f-num)!important;font-variant-numeric:tabular-nums;text-align:right}
+.btn{background:transparent!important;border:1px solid var(--rule2)!important;border-radius:3px!important;color:var(--muted)!important;
+  font:600 .82rem var(--f-ui)!important;padding:6px 12px!important;transition:color .15s,background .15s}
+.btn:hover{color:var(--ink)!important;background:var(--press)!important}
+.btn.on{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important;box-shadow:inset 0 -2px 0 var(--gold)}
+.fml{background:transparent!important;border:0!important;border-left:2px solid var(--gold)!important;border-radius:0!important;
+  font:400 1.08rem/1.7 var(--f-math)!important;color:var(--ink);padding:4px 0 4px 14px!important;margin:14px 0!important}
+.info{background:var(--paper)!important;border:1px solid var(--rule)!important;border-radius:3px!important;
+  font:500 .84rem/1.8 var(--f-num)!important;color:var(--muted)!important;padding:8px 14px!important}
+input[type=range]{-webkit-appearance:none;appearance:none;height:24px;background:linear-gradient(var(--rule2),var(--rule2)) center/100% 2px no-repeat;cursor:pointer;--pc:var(--gold)}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:transparent}
+input[type=range]::-moz-range-track{height:2px;background:transparent}
+input[type=range]::-moz-range-progress{height:2px;background:var(--pc)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:6px;height:20px;border-radius:1px;background:var(--pc);margin-top:-9px;border:0}
+input[type=range]::-moz-range-thumb{width:6px;height:20px;border-radius:1px;background:var(--pc);border:0}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.sfa-foot{margin-top:22px;padding-top:10px;border-top:1px solid var(--rule);font-size:.78rem;color:var(--faint)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>
+/* Curseurs : la couleur du curseur reprend celle de son accent-color d'origine ; remplissage gauche en couleur. */
+addEventListener('DOMContentLoaded',()=>{
+/* Curseurs : couleur reprise de accent-color, remplissage à gauche. Resynchronisé en continu pour suivre
+   les curseurs créés ou déplacés par la simulation elle-même. */
+const fill=r=>{if(!r.dataset.sfa){r.dataset.sfa=1;const c=r.style.accentColor||getComputedStyle(r).accentColor;
+    if(c&&c!=='auto')r.style.setProperty('--pc',c);}
+  const v=r.value+'|'+r.min+'|'+r.max;if(r._sv===v)return;r._sv=v;
+  const p=(r.value-r.min)/(r.max-r.min)*100;
+  r.style.background=`linear-gradient(to right,var(--pc) ${p}%,var(--rule2) ${p}%) center/100% 2px no-repeat`;};
+const all=()=>document.querySelectorAll('input[type=range]').forEach(fill);
+all();document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches('input[type=range]'))fill(e.target);});
+setInterval(all,150);
+/* Contrôles écrits en style en ligne (sans classe) : on leur donne les classes du kit. */
+const st=e=>(e.getAttribute('style')||'').replace(/\s/g,'').toLowerCase();
+const isPill=e=>/border-radius:(1[6-9]|20|99)px/.test(st(e));
+document.querySelectorAll('span').forEach(sp=>{if(sp.classList.length||!isPill(sp))return;
+  const n=sp.nextElementSibling,pv=sp.previousElementSibling;
+  if(n&&n.matches('input[type=range],select,button'))sp.classList.add('pill');
+  else if(pv&&pv.matches('input[type=range],select'))sp.classList.add('val');
+  else sp.classList.add('pill');});
+document.querySelectorAll('div').forEach(d=>{if(d.classList.length)return;const s=st(d);
+  if(/border-radius:(1[6-9]|20)px/.test(s)&&/monospace/.test(s))d.classList.add(d.id==='fml'?'fml':'info');
+  else if(d.querySelector(':scope>canvas')&&/border-radius:1[0-4]px/.test(s))d.classList.add('sfa-stage');});
+const tag=b=>{const s=st(b);b.classList.toggle('on',/#185fa5|rgb\(24,95,165\)/.test(s)&&!/#fff[;f]|#ffffff|rgb\(255,255,255\)/.test(s.match(/background:[^;]+/)?.[0]||''));};
+document.querySelectorAll('button:not(.btn)').forEach(b=>{b.classList.add('btn','sfa-n');tag(b);});
+new MutationObserver(ms=>ms.forEach(m=>{if(m.target.classList&&m.target.classList.contains('sfa-n'))tag(m.target);}))
+  .observe(document.body,{subtree:true,attributes:true,attributeFilter:['style']});
+});
+</script>
+<header class="sfa-head"><h1>Pendule 2D-3D<small>Pendule simple vu en plan et en perspective</small></h1><span class="sfa-tag"><b>SFA</b> · Physique · Oscillations</span></header>
+
+
 
 <canvas id="cv" style="width:100%;height:58vh;min-height:400px;"></canvas>
 <div class="fml" id="fml"></div>
@@ -85,30 +170,40 @@ function arrow(x,y,vx,vy,col,lab,w,dash){const len=Math.hypot(vx,vy);if(len<3)re
   ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();ctx.setLineDash([]);
   const hs=(w||2.5)*3,ang=Math.atan2(vy,vx);ctx.fillStyle=col;ctx.save();ctx.translate(ex,ey);ctx.rotate(ang);
   ctx.beginPath();ctx.moveTo(hs,0);ctx.lineTo(-hs*0.7,-hs*0.55);ctx.lineTo(-hs*0.7,hs*0.55);ctx.closePath();ctx.fill();ctx.restore();
-  if(lab){ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.fillStyle=col;ctx.fillText(lab,ex+vx/len*15,ey+vy/len*15+4);}}
-function lbl(t,x,y,col){ctx.fillStyle=col;ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.fillText(t,x,y);}
+  if(lab){ctx.font='700 12px Mulish,system-ui,sans-serif';ctx.textAlign='center';ctx.fillStyle=col;ctx.fillText(lab,ex+vx/len*15,ey+vy/len*15+4);}}
+function tagL(t,x,y,col,al){ctx.font='700 12px Mulish,system-ui,sans-serif';ctx.textAlign=al||'center';const w=ctx.measureText(t).width;
+  if(al==='left')x=Math.min(x,W-4-w);else if(al==='right')x=Math.max(x,4+w);else x=Math.max(4+w/2,Math.min(W-4-w/2,x));
+  const x0=al==='left'?x:al==='right'?x-w:x-w/2;
+  ctx.fillStyle='rgba(255,255,255,0.82)';ctx.fillRect(x0-2,y-11,w+4,15);ctx.fillStyle=col;ctx.fillText(t,x,y);}
+function lbl(t,x,y,col){ctx.fillStyle=col;ctx.font='700 12px Mulish,system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(t,x,y);}
 
 // ===== 2D oscillation =====
 let pivot={x:0,y:0},Lpx=0;
 function draw2D(){
-  pivot={x:W*0.5,y:H*0.24};Lpx=L*(H*0.42/2.6);
+  pivot={x:W*0.5,y:H*0.24};Lpx=L*(Math.min(H*0.42,W*0.32)/2.6);
   const sN=Math.sin(th2),cN=Math.cos(th2);
   const bob={x:pivot.x+Lpx*sN,y:pivot.y+Lpx*cN};
   const rO={x:sN,y:cN},v=L*om2,T=m*g*cN+m*v*v/L;
   ctx.strokeStyle='#eef0f2';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(pivot.x,pivot.y,Lpx,0,7);ctx.stroke();
   ctx.strokeStyle='#e6e8ea';ctx.setLineDash([4,5]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pivot.x,pivot.y);ctx.lineTo(pivot.x,pivot.y+Lpx+16);ctx.stroke();ctx.setLineDash([]);
-  ctx.strokeStyle=GREY;ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(pivot.x,pivot.y,24,Math.PI/2,Math.PI/2-th2,th2>0);ctx.stroke();lbl('θ',pivot.x+(th2>=0?15:-15),pivot.y+32,GREY);
+  ctx.strokeStyle=GREY;ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(pivot.x,pivot.y,24,Math.PI/2,Math.PI/2-th2,th2>0);ctx.stroke();
+  if(Math.abs(th2)>0.12){const rT=Math.max(36,Math.min(80,9/Math.sin(Math.abs(th2)/2)));lbl('θ',pivot.x+rT*Math.sin(th2/2),pivot.y+rT*Math.cos(th2/2)+4,GREY);}
   ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pivot.x,pivot.y);ctx.lineTo(bob.x,bob.y);ctx.stroke();
   ctx.fillStyle='#c2c6ca';ctx.fillRect(pivot.x-22,pivot.y-7,44,6);ctx.fillStyle=GREY;ctx.beginPath();ctx.arc(pivot.x,pivot.y,3,0,7);ctx.fill();
-  const kF=3.2,cap=88,A=x=>Math.min(x*kF,cap),Pmg=m*g;
+  const kF=3.2,cap=88,A=x=>Math.min(x*kF,cap),Pmg=m*g,labs=[];
   if(showD){const tanMag=Pmg*Math.abs(sN),radMag=Pmg*cN,tanDir={x:-cN,y:sN},sg=Math.sign(sN||1);
     const tv={x:tanDir.x*A(tanMag)*sg,y:tanDir.y*A(tanMag)*sg},rv={x:rO.x*A(radMag),y:rO.y*A(radMag)};
-    arrow(bob.x,bob.y,tv.x,tv.y,GREEN,'mg·sinθ',2.2,[5,4]);arrow(bob.x,bob.y,rv.x,rv.y,ORANGE,'mg·cosθ',2.2,[5,4]);
+    arrow(bob.x,bob.y,tv.x,tv.y,GREEN,null,2.2,[5,4]);arrow(bob.x,bob.y,rv.x,rv.y,ORANGE,null,2.2,[5,4]);
+    labs.push(()=>{const lt=Math.hypot(tv.x,tv.y);if(lt>=3)tagL('mg·sinθ',bob.x+tv.x+tv.x/lt*8,bob.y+tv.y+tv.y/lt*8+4,GREEN,tv.x<0?'right':'left');
+      if(Math.hypot(rv.x,rv.y)>=3)tagL('mg·cosθ',bob.x+rv.x+(sg>0?8:-8),bob.y+rv.y-6,ORANGE,sg>0?'left':'right');});
     const P={x:0,y:A(Pmg)};ctx.strokeStyle='#d7d7d7';ctx.setLineDash([3,4]);ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(bob.x+tv.x,bob.y+tv.y);ctx.lineTo(bob.x+P.x,bob.y+P.y);ctx.moveTo(bob.x+rv.x,bob.y+rv.y);ctx.lineTo(bob.x+P.x,bob.y+P.y);ctx.stroke();ctx.setLineDash([]);}
-  if(showF){arrow(bob.x,bob.y,-rO.x*A(T),-rO.y*A(T),BLUE,'T̄',3);arrow(bob.x,bob.y,0,A(Pmg),INK,'P̄=mḡ',3);}
+  if(showF){const tx=-rO.x*A(T),ty=-rO.y*A(T),sd=th2>=0?-1:1,nx=cN*sd,ny=-sN*sd;
+    arrow(bob.x,bob.y,tx,ty,BLUE,null,3);arrow(bob.x,bob.y,0,A(Pmg),INK,null,3);
+    labs.push(()=>{tagL('T̄',bob.x+tx+nx*12,bob.y+ty+ny*12+4,BLUE,nx<-0.3?'right':nx>0.3?'left':'center');tagL('P̄=mḡ',bob.x,bob.y+A(Pmg)+20,INK);});}
   if(showV&&Math.abs(v)>0.05){const tHat={x:cN,y:-sN};arrow(bob.x,bob.y,tHat.x*Math.sign(om2)*Math.min(Math.abs(v)*15,72),tHat.y*Math.sign(om2)*Math.min(Math.abs(v)*15,72),GREEN_D,'v̄',2.4);}
   ctx.fillStyle='#e6f1fb';ctx.strokeStyle=BLUE;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(bob.x,bob.y,10,0,7);ctx.fill();ctx.stroke();
+  labs.forEach(f=>f());
   document.getElementById('info').innerHTML='θ='+(th2*180/Math.PI).toFixed(0)+'° | v='+Math.abs(v).toFixed(2)+' m/s | <b style="color:'+GREEN_D+'">rappel mg·sinθ='+(m*g*Math.abs(sN)).toFixed(1)+' N</b> | <b style="color:'+BLUE_D+'">T='+T.toFixed(1)+' N</b>';
   if(!paused&&!drag){const dt=0.016,nS=6;for(let i=0;i<nS;i++){om2+=-(g/L)*Math.sin(th2)*(dt/nS);th2+=om2*(dt/nS);}}
 }
@@ -134,13 +229,17 @@ function draw3D(){
   const ps=proj(0,Lc,0);ctx.fillStyle='#c2c6ca';ctx.fillRect(ps.x-18,ps.y-6,36,5);ctx.fillStyle=GREY;ctx.beginPath();ctx.arc(ps.x,ps.y,3,0,7);ctx.fill();
   const mg=m*g,T=mg/cT,Fc=mg*sT/cT,kW=1.1/mg,cap=2.4,Lw=F=>Math.min(F*kW,cap);
   const toP=[piv[0]-bob[0],piv[1]-bob[1],piv[2]-bob[2]],nP=Math.hypot(toP[0],toP[1],toP[2]),td=[toP[0]/nP,toP[1]/nP,toP[2]/nP],cd=[-bob[0]/(r||1),0,-bob[2]/(r||1)];
-  if(showD){const pv=arr3(bob,[bob[0],bob[1]+Lw(mg),bob[2]],GREEN_D,2.2,[5,4]);lbl('T·cosθ=mg',pv.x,pv.y-8,GREEN_D);
-    const ph2=arr3(bob,[bob[0]+cd[0]*Lw(Fc),bob[1],bob[2]+cd[2]*Lw(Fc)],ORANGE,2.4,[5,4]);lbl('centripète',ph2.x,ph2.y-8,ORANGE);}
-  if(showF){const pt=arr3(bob,[bob[0]+td[0]*Lw(T),bob[1]+td[1]*Lw(T),bob[2]+td[2]*Lw(T)],BLUE,3);lbl('T̄',pt.x+10,pt.y,BLUE_D);
-    const pw=arr3(bob,[bob[0],bob[1]-Lw(mg),bob[2]],INK,3);lbl('P̄=mḡ',pw.x,pw.y+14,INK);}
-  if(showV){const v=om*r,vd=[-Math.sin(phi),0,Math.cos(phi)];const pvv=arr3(bob,[bob[0]+vd[0]*Lw(mg)*Math.min(v/3,1.3),0,bob[2]+vd[2]*Lw(mg)*Math.min(v/3,1.3)],GREEN,2.6);lbl('v̄',pvv.x+8,pvv.y,GREEN);}
+  const b0=proj(bob[0],bob[1],bob[2]),labs=[];
+  const tip=(t,q,col,perp)=>{let ux=q.x-b0.x,uy=q.y-b0.y;const l=Math.hypot(ux,uy)||1;ux/=l;uy/=l;
+    if(perp){const sd=ux>=0?1:-1;const px=-uy*sd,py=ux*sd;labs.push(()=>tagL(t,q.x+px*12,q.y+py*12+4,col,px>0.3?'left':px<-0.3?'right':'center'));return;}
+    labs.push(()=>tagL(t,q.x+ux*9,q.y+uy*12+4,col,ux>0.4?'left':ux<-0.4?'right':'center'));};
+  if(showD){const pv=arr3(bob,[bob[0],bob[1]+Lw(mg),bob[2]],GREEN_D,2.2,[5,4]);tip('T·cosθ=mg',pv,GREEN_D);
+    const ph2=arr3(bob,[bob[0]+cd[0]*Lw(Fc),bob[1],bob[2]+cd[2]*Lw(Fc)],ORANGE,2.4,[5,4]);tip('centripète',ph2,ORANGE);}
+  if(showF){const pt=arr3(bob,[bob[0]+td[0]*Lw(T),bob[1]+td[1]*Lw(T),bob[2]+td[2]*Lw(T)],BLUE,3);tip('T̄',pt,BLUE_D,true);
+    const pw=arr3(bob,[bob[0],bob[1]-Lw(mg),bob[2]],INK,3);tip('P̄=mḡ',pw,INK);}
+  if(showV){const v=om*r,vd=[-Math.sin(phi),0,Math.cos(phi)];const pvv=arr3(bob,[bob[0]+vd[0]*Lw(mg)*Math.min(v/3,1.3),0,bob[2]+vd[2]*Lw(mg)*Math.min(v/3,1.3)],GREEN,2.6);tip('v̄',pvv,GREEN);}
   const b=proj(bob[0],bob[1],bob[2]),R=9;const gr=ctx.createRadialGradient(b.x-R*0.35,b.y-R*0.4,R*0.15,b.x,b.y,R);
-  gr.addColorStop(0,'#fff');gr.addColorStop(0.25,'#7db3e6');gr.addColorStop(1,BLUE_D);ctx.fillStyle=gr;ctx.beginPath();ctx.arc(b.x,b.y,R,0,7);ctx.fill();ctx.strokeStyle=BLUE_D;ctx.lineWidth=1.5;ctx.stroke();
+  gr.addColorStop(0,'#fff');gr.addColorStop(0.25,'#7db3e6');gr.addColorStop(1,BLUE_D);ctx.fillStyle=gr;ctx.beginPath();ctx.arc(b.x,b.y,R,0,7);ctx.fill();ctx.strokeStyle=BLUE_D;ctx.lineWidth=1.5;ctx.stroke();labs.forEach(f=>f());
   const v=om*r,per=2*Math.PI/om;
   document.getElementById('info').innerHTML='θ='+thDeg+'° | r='+r.toFixed(2)+' m | <b style="color:'+BLUE_D+'">ω=√(g/L·cosθ)='+om.toFixed(2)+' rad/s</b> | période='+per.toFixed(2)+' s | v='+v.toFixed(2)+' m/s | <b style="color:'+BLUE_D+'">T=mg/cosθ='+T.toFixed(1)+' N</b>';
   if(!paused)phi+=om*0.016*0.7;
@@ -161,3 +260,6 @@ cv.addEventListener('wheel',e=>{if(mode!=='3d')return;e.preventDefault();const f
 
 setMode('2d');draw();
 </script>
+<footer class="sfa-foot">Science For All · simulations interactives</footer>
+</body>
+</html>
